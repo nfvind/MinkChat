@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1082060407939",
+    "firebase_url": "https://minkchat-a288d.firebaseio.com",
+    "project_id": "minkchat-a288d",
+    "storage_bucket": "minkchat-a288d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1082060407939:android:8e49b82b6ee0aac9f7c7b6",
+        "android_client_info": {
+          "package_name": "com.minkchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1082060407939-jssggi0ner14jkglv5jtr4k03ffhfmnd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcCLfSfzyXoBnemu4i5iMI_YSrXJc37Y4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1082060407939-jssggi0ner14jkglv5jtr4k03ffhfmnd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
