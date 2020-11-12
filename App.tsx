@@ -8,7 +8,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -17,7 +17,7 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-
+import RNBootSplash from "react-native-bootsplash";
 import {
   Header,
   LearnMoreLinks,
@@ -29,6 +29,15 @@ import {
 declare const global: {HermesInternal: null | {}};
 
 const App = () => {
+  let init = async () => {
+    // …do multiple async tasks
+  };
+
+  useEffect(() => {
+    init().finally(() => {
+      RNBootSplash.hide({duration: 250 });
+    });
+  }, []);
   return (
     <>
       <StatusBar barStyle="dark-content" />
