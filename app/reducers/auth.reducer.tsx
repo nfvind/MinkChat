@@ -37,6 +37,9 @@ export type AuthActionType = ActionMap<AuthPayload>[keyof ActionMap<
 >];
 export const authReducer = (state: AuthType, action: AuthActionType) => {
   console.log('authRed', action.type, AuthTypes.Restore);
+  if (action.type !== "SIGN_OUT") {
+    console.log(action.payload.userCredential);
+  }
   switch (action.type) {
     case AuthTypes.Restore: {
       return {

@@ -14,6 +14,7 @@ const signInWithGoogle = async () => {
     const googlecredentials = auth.GoogleAuthProvider.credential(
       userInfo.idToken,
     );
+
     return await auth().signInWithCredential(googlecredentials);
   } catch (e) {
     console.error(e);

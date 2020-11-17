@@ -15,9 +15,9 @@ import {
   ScrollView,
   View,
   Text,
-  StatusBar,
+  StatusBar, Alert,
 } from 'react-native';
-import {GoogleSignin} from '@react-native-community/google-signin';
+import {GoogleSignin, GoogleSigninButton, statusCodes} from '@react-native-community/google-signin';
 import RNBootSplash from 'react-native-bootsplash';
 import {
   Header,
@@ -26,23 +26,42 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-GoogleSignin.configure({
-  webClientId: '',
-});
+import {signInWithGoogle} from '../../services/auth.google.service';
+import {AuthTypes} from '../../reducers/auth.reducer';
+import {useAuthContext} from '../../context/auth.context';
+
 declare const global: {HermesInternal: null | {}};
 
 export const loginScreen = () => {
-  const GoogleSignIn = () => {
-    return (
-      <Button
-        title="Google Sign-In"
-        onPress={() =>
-          onGoogleButtonPress().then(() =>
-            console.log('Signed in with Google!'),
-          )
+  const {dispatch} = useAuthContext();
+  const signInWithGoogleBtn = async () => {
+    signInWithGoogle()
+      .then((userCredential) => {
+        dispatch({
+          type: AuthTypes.SignIn,
+          payload: {
+            userCredential: userCredential,
+          },
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        switch (error.code) {
+          case statusCodes.PLAY_SERVICES_NOT_AVAILABLE: {
+            // android only
+            Alert.alert(
+              'Google Play-tjenester er ikke tilgængelige eller forældede!',
+            );
+            break;
+          }
+          case 'auth/user-disabled': {
+            Alert.alert(
+              'Brugerkontoen er blevet deaktiveret af en administrator.',
+            );
+            break;
+          }
         }
-      />
-    );
+      });
   };
   return (
     <>
@@ -61,8 +80,12 @@ export const loginScreen = () => {
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Step One</Text>
               <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.tsx</Text> to change
-                this screen and then come back to see your edits.
+                Edit <Text style={styles.highlight}>App.tsx</Text>
+                <GoogleSigninButton
+                  size={GoogleSigninButton.Size.Wide}
+                  color={GoogleSigninButton.Color.Light}
+                  onPress={signInWithGoogleBtn}
+                />
               </Text>
             </View>
           </View>
