@@ -7,7 +7,7 @@ GoogleSignin.configure({
     '930058345444-8nrc5mnhus45qfeoeanr12u7emf275mp.apps.googleusercontent.com',
   offlineAccess: false,
 });
-const signIn = async () => {
+const signInWithGoogle = async () => {
   try {
     await GoogleSignin.hasPlayServices();
     const userInfo = await GoogleSignin.signIn();
@@ -20,7 +20,7 @@ const signIn = async () => {
   }
 };
 
-const checkAuth = async () => {
+const checkGoogleAuth = async () => {
   try {
     const userInfo = await GoogleSignin.signInSilently();
     const googlecredentials = auth.GoogleAuthProvider.credential(
@@ -33,10 +33,11 @@ const checkAuth = async () => {
     // @ts-ignore
     const error =
       e.code === statusCodes.SIGN_IN_REQUIRED ? 'Venligst log ind' : e.message;
-    console.error(error);
+    console.error('googleservce', error);
+    throw new Error(error);
   }
 };
-const signOut = async () => {
+const signOutGoogle = async () => {
   try {
     await GoogleSignin.signOut();
     await auth().signOut();
@@ -44,4 +45,4 @@ const signOut = async () => {
     throw new Error(error.toString());
   }
 };
-export {signOut, signIn, checkAuth};
+export {signOutGoogle, signInWithGoogle, checkGoogleAuth};

@@ -15,6 +15,7 @@ export enum AuthTypes {
   SignInGoogle = 'SIGN_IN_GOOGLE',
   SignOut = 'SIGN_OUT',
   SignInFB = 'SIGN_IN_FB',
+  SignIn = 'SIGN_IN',
 }
 type AuthType = {
   isLoading: boolean;
@@ -26,18 +27,16 @@ type AuthPayload = {
   [AuthTypes.Restore]: {
     userCredential: FirebaseAuthTypes.UserCredential;
   };
-  [AuthTypes.SignInGoogle]: {
-    userCredential: FirebaseAuthTypes.UserCredential;
-  };
-  [AuthTypes.SignInFB]: {
+  [AuthTypes.SignIn]: {
     userCredential: FirebaseAuthTypes.UserCredential;
   };
   [AuthTypes.SignOut]: undefined;
 };
-
-type AuthActions = ActionMap<AuthPayload>[keyof ActionMap<AuthPayload>];
-
-const authReducer = (state: AuthType, action: AuthActions) => {
+export type AuthActionType = ActionMap<AuthPayload>[keyof ActionMap<
+  AuthPayload
+>];
+export const authReducer = (state: AuthType, action: AuthActionType) => {
+  console.log('authRed', action.type, AuthTypes.Restore);
   switch (action.type) {
     case AuthTypes.Restore: {
       return {
@@ -46,13 +45,7 @@ const authReducer = (state: AuthType, action: AuthActions) => {
         isLoading: false,
       };
     }
-    case AuthTypes.SignInGoogle:
-      return {
-        ...state,
-        isSignout: false,
-        userCredential: action.payload.userCredential,
-      };
-    case AuthTypes.SignInFB:
+    case AuthTypes.SignIn:
       return {
         ...state,
         isSignout: false,
@@ -68,5 +61,3 @@ const authReducer = (state: AuthType, action: AuthActions) => {
       return state;
   }
 };
-
-export {AuthActions, authReducer};

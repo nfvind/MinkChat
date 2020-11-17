@@ -1,49 +1,52 @@
 import auth from '@react-native-firebase/auth';
-import { LoginManager, AccessToken } from 'react-native-fbsdk';
-/*
+import {LoginManager, AccessToken} from 'react-native-fbsdk';
 
-LoginManager.configure({
-    scopes: ['email', 'profile'],
-    webClientId:
-        '930058345444-8nrc5mnhus45qfeoeanr12u7emf275mp.apps.googleusercontent.com',
-    offlineAccess: false,
-});
-const signIn = async () => {
-    try {
-        await GoogleSignin.hasPlayServices();
-        const userInfo = await GoogleSignin.signIn();
-        const googlecredentials = auth.GoogleAuthProvider.credential(
-            userInfo.idToken,
-        );
-        return await auth().signInWithCredential(googlecredentials);
-    } catch (e) {
-        console.error(e);
+const signInWithFacebook = async () => {
+  try {
+    const result = await LoginManager.LogInWithPermissions([
+      'public_profile',
+      'email',
+    ]);
+    if (result.isCancelled) {
+      console.error('noget gik galt ved hentning af token');
     }
+    const data = await AccessToken.getCurrentAccessToken();
+    if (!data) {
+      console.error('no token data');
+    }
+    const fbCreds = auth.FacebookAuthProvider.credential(data.accessToken);
+    return auth().signInWithCredential(fbCreds);
+  } catch (e) {
+    console.error(e);
+  }
 };
 
-const checkAuth = async () => {
-    try {
-        const userInfo = await GoogleSignin.signInSilently();
-        const googlecredentials = auth.GoogleAuthProvider.credential(
-            userInfo.idToken,
-        );
-        const userCredential = await auth().signInWithCredential(googlecredentials);
+const checkFacebookAuth = async () => {
+  try {
+    const result = await LoginManager.LogInWithPermissions([
+      'public_profile',
+      'email',
+    ]);
+    if (result.isCancelled) {
+      console.error('noget gik galt ved hentning af token');
+    }
+    const data = await AccessToken.getCurrentAccessToken();
+    if (!data) {
+      console.error('no token data');
+    }
+    const fbCreds = auth.FacebookAuthProvider.credential(data.accessToken);
 
-        return userCredential;
-    } catch (e) {
-        // @ts-ignore
-        const error =
-            e.code === statusCodes.SIGN_IN_REQUIRED ? 'Venligst log ind' : e.message;
-        console.error(error);
-    }
+    return auth().signInWithCredential(fbCreds);
+  } catch (e) {
+    // @ts-ignore
+    console.error(e);
+  }
 };
-const signOut = async () => {
-    try {
-        await GoogleSignin.signOut();
-        await auth().signOut();
-    } catch (error) {
-        throw new Error(error.toString());
-    }
+const signOutFacebook = async () => {
+  try {
+    LoginManager.logOut();
+  } catch (e) {
+    throw new Error(e.toString());
+  }
 };
-export {signOut, signIn, checkAuth};
-*/
+export {signOutFacebook, signInWithFacebook, checkFacebookAuth};
