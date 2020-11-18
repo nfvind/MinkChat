@@ -15,9 +15,15 @@ import {
   ScrollView,
   View,
   Text,
-  StatusBar, Alert,
+  StatusBar,
+  Alert,
+  Button,
 } from 'react-native';
-import {GoogleSignin, GoogleSigninButton, statusCodes} from '@react-native-community/google-signin';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-community/google-signin';
 import RNBootSplash from 'react-native-bootsplash';
 import {
   Header,
@@ -26,9 +32,11 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import {LoginButton, AccessToken} from 'react-native-fbsdk';
 import {signInWithGoogle} from '../../services/auth.google.service';
 import {AuthTypes} from '../../reducers/auth.reducer';
 import {useAuthContext} from '../../context/auth.context';
+import {signInWithFacebook} from '../../services/auth.facebook.service';
 
 declare const global: {HermesInternal: null | {}};
 
@@ -63,6 +71,11 @@ export const loginScreen = () => {
         }
       });
   };
+  const FacebookSignIn = () => {
+    signInWithFacebook().then(() => {
+      console.log('Signed in with Facebook!');
+    });
+  };
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -85,6 +98,21 @@ export const loginScreen = () => {
                   size={GoogleSigninButton.Size.Wide}
                   color={GoogleSigninButton.Color.Light}
                   onPress={signInWithGoogleBtn}
+                />
+                <Button title="Facebook Sign-In" onPress={FacebookSignIn} />
+                <LoginButton
+                  onLoginFinished={(error, result) => {
+                    if (error) {
+                      console.log('login has error: ' + result.error);
+                    } else if (result.isCancelled) {
+                      console.log('login is cancelled.');
+                    } else {
+                      AccessToken.getCurrentAccessToken().then((data) => {
+                        console.log(data.accessToken.toString());
+                      });
+                    }
+                  }}
+                  onLogoutFinished={() => console.log('logout.')}
                 />
               </Text>
             </View>

@@ -4,7 +4,7 @@ import auth from '@react-native-firebase/auth';
 GoogleSignin.configure({
   scopes: ['email', 'profile'],
   webClientId:
-    '930058345444-8nrc5mnhus45qfeoeanr12u7emf275mp.apps.googleusercontent.com',
+    '1082060407939-jssggi0ner14jkglv5jtr4k03ffhfmnd.apps.googleusercontent.com',
   offlineAccess: false,
 });
 const signInWithGoogle = async () => {
@@ -43,7 +43,7 @@ const signOutGoogle = async () => {
     await GoogleSignin.signOut();
     await auth().signOut();
   } catch (error) {
-    throw new Error(error.toString());
+    throw new Error('signout', error.toString());
   }
 };
 export {signOutGoogle, signInWithGoogle, checkGoogleAuth};

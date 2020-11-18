@@ -1,23 +1,23 @@
 import React from 'react';
-import { createContext, useReducer, useContext, Dispatch } from 'react';
+import {createContext, useReducer, useContext, Dispatch} from 'react';
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {authReducer, AuthActions} from '../reducers/auth.reducer';
+import {authReducer, AuthActionType} from '../reducers/auth.reducer';
 
 type AuthStateType = {
   isLoading: boolean;
-  isSignout: boolean;
+  isSignedOut: boolean;
   userCredential: FirebaseAuthTypes.UserCredential;
 };
 
 const initialState: AuthStateType = {
   isLoading: true,
-  isSignout: false,
+  isSignedOut: false,
   userCredential: null,
 };
 
 const AuthContext = createContext<{
   state: AuthStateType;
-  dispatch: Dispatch<AuthActions>; // Dispatch<AuthAction>
+  dispatch: Dispatch<AuthActionType>; // Dispatch<AuthAction>
 }>({
   state: initialState,
   dispatch: () => null,

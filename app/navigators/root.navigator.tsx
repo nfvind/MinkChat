@@ -4,10 +4,12 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useAuthContext} from '../context/auth.context';
 import {AuthTypes} from '../reducers/auth.reducer';
+import {AccessToken} from 'react-native-fbsdk';
 import {checkGoogleAuth} from '../services/auth.google.service';
 //import {checkFacebookAuth} from '../services/auth.facebook.service';
 import {AuthNavigator} from './auth.navigator';
 import {Text, View} from 'react-native';
+import {HomeNavigator} from './home.navigator';
 
 const Stack = createStackNavigator();
 
@@ -16,17 +18,23 @@ export const RootNavigator = () => {
 
   useEffect(() => {
     const loadAuth = async () => {
-      let userCredential = null;
+      let userCredentialG = null;
+      let userCredentialFB = null;
       try {
-        userCredential = await checkGoogleAuth();
-        console.log('root nav', userCredential);
+        userCredentialG = await checkGoogleAuth();
+        userCredentialFB = await AccessToken.getCurrentAccessToken();
+
+        AccessToken.getCurrentAccessToken().then((data) => {
+          console.log(data.accessToken.toString());
+          userCredentialFB = data.accessToken.toString();
+        });
       } catch (error) {
         console.log('error', error);
       }
       dispatch({
         type: AuthTypes.Restore,
         payload: {
-          userCredential: userCredential,
+          userCredential: userCredentialFB,
         },
       });
     };
@@ -37,12 +45,10 @@ export const RootNavigator = () => {
     <NavigationContainer>
       <Stack.Navigator headerMode="none" mode="card">
         {state.userCredential == null ? (
-
           <Stack.Screen name="Auth" component={AuthNavigator} />
         ) : (
           // User is signed in
-
-          <View>lol</View>
+          <Stack.Screen name="Home" component={HomeNavigator} />
         )}
       </Stack.Navigator>
     </NavigationContainer>
