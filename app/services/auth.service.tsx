@@ -1,17 +1,23 @@
-import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import {GoogleSignIn} from '../services/auth.google.service';
-import auth from '@react-native-firebase/auth';
-
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import {SignInWithFacebook} from "./auth.facebook.service";
+import {useAuthContext} from "../context/auth.context";
 const signIn = async (LoginProviderType: keyof typeof LoginProviderTypes) => {
+  const {AuthProviderType, setAuthProviderType} = useAuthContext();
   try {
     let credentials = null;
+
     switch (LoginProviderType) {
       case LoginProviderTypes.Facebook: {
+        credentials = await SignInWithFacebook();
         break;
       }
 
       case LoginProviderTypes.Google: {
         credentials = await GoogleSignIn();
+        break;
+      }
+      default: {
         break;
       }
     }

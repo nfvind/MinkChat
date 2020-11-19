@@ -36,7 +36,6 @@ import {LoginButton, AccessToken} from 'react-native-fbsdk';
 import {signIn, LoginProviderTypes} from '../../services/auth.service';
 import {AuthAction} from '../../reducers/auth.reducer';
 import {useAuthContext} from '../../context/auth.context';
-import {signInWithFacebook} from '../../services/auth.facebook.service';
 
 declare const global: {HermesInternal: null | {}};
 
@@ -44,7 +43,6 @@ export const loginScreen = () => {
   const {dispatch} = useAuthContext();
   const signInWithGoogleBtn = async () => {
     signIn(LoginProviderTypes.Google).then((userCredential) => {
-      console.log(userCredential);
       dispatch({
         type: AuthAction.SignIn,
         payload: {
@@ -53,7 +51,16 @@ export const loginScreen = () => {
       });
     });
   };
-  const FacebookSignIn = () => {};
+  const FacebookSignIn = () => {
+    signIn(LoginProviderTypes.Facebook).then((userCredential) => {
+      dispatch({
+        type: AuthAction.SignIn,
+        payload: {
+          userCredential: userCredential,
+        },
+      });
+    });
+  };
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -76,6 +83,10 @@ export const loginScreen = () => {
                   size={GoogleSigninButton.Size.Wide}
                   color={GoogleSigninButton.Color.Light}
                   onPress={signInWithGoogleBtn}
+                />
+                <Button
+                    title="Facebook Sign-In"
+                    onPress={FacebookSignIn}
                 />
               </Text>
             </View>

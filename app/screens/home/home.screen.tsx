@@ -7,6 +7,7 @@ import {signInWithFacebook} from '../../services/auth.facebook.service';
 import {AuthAction} from '../../reducers/auth.reducer';
 export const HomeScreen = () => {
   const {state, dispatch} = useAuthContext();
+
   useEffect(() => {}, [state.userCredential]);
 
   const handleSignOut = async () => {

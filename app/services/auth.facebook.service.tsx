@@ -1,22 +1,26 @@
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {LoginManager, AccessToken} from 'react-native-fbsdk';
-import AuthProvider = FirebaseAuthTypes.AuthProvider;
 
-const signInWithFacebook = async () => {
+const SignInWithFacebook = async () => {
   try {
-    const result = await LoginManager.LogInWithPermissions([
-      'public_profile',
-      'email',
-    ]);
+    // Attempt login with permissions
+    const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+
     if (result.isCancelled) {
-      console.error('noget gik galt ved hentning af token');
+      throw 'User cancelled the login process';
     }
+
+    // Once signed in, get the users AccesToken
     const data = await AccessToken.getCurrentAccessToken();
+
     if (!data) {
-      console.error('no token data');
+      throw 'Something went wrong obtaining access token';
     }
-    const fbCreds = auth.FacebookAuthProvider.credential(data.accessToken);
-    return auth().signInWithCredential(fbCreds);
+console.log(data.accessToken);
+    // Create a Firebase credential with the AccessToken
+
+    // Sign-in the user with the credential
+    return auth.FacebookAuthProvider.credential(data.accessToken);
   } catch (e) {
     console.error(e);
   }
@@ -50,4 +54,4 @@ const signOutFacebook = async () => {
     throw new Error(e.toString());
   }
 };
-export {signOutFacebook, signInWithFacebook, checkFacebookAuth};
+export {signOutFacebook, SignInWithFacebook, checkFacebookAuth};
