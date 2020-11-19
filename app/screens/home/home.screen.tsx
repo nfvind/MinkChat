@@ -5,13 +5,15 @@ import {useAuthContext} from '../../context/auth.context';
 import {signOutGoogle} from '../../services/auth.google.service';
 import {signInWithFacebook} from '../../services/auth.facebook.service';
 import {AuthAction} from '../../reducers/auth.reducer';
+import {LoginProviderTypes, signOut} from "../../services/auth.service";
 export const HomeScreen = () => {
   const {state, dispatch} = useAuthContext();
 
   useEffect(() => {}, [state.userCredential]);
 
   const handleSignOut = async () => {
-    await signOutGoogle();
+    await signOut(LoginProviderTypes.Facebook);
+    await signOut(LoginProviderTypes.Google);
     console.log('logout');
     dispatch({type: AuthAction.SignOut});
   };

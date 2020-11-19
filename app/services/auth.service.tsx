@@ -1,9 +1,9 @@
-import {GoogleSignIn} from '../services/auth.google.service';
+import {GoogleSignIn, signOutGoogle} from '../services/auth.google.service';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {SignInWithFacebook} from "./auth.facebook.service";
-import {useAuthContext} from "../context/auth.context";
+import {SignInWithFacebook, signOutFacebook} from './auth.facebook.service';
+import {useAuthContext} from '../context/auth.context';
+import {statusCodes} from "@react-native-community/google-signin";
 const signIn = async (LoginProviderType: keyof typeof LoginProviderTypes) => {
-  const {AuthProviderType, setAuthProviderType} = useAuthContext();
   try {
     let credentials = null;
 
@@ -33,24 +33,26 @@ enum LoginProviderTypes {
 }
 const checkAuth = async () => {
   try {
-    const userInfo = await GoogleSignin.signInSilently();
-    const googlecredentials = auth.GoogleAuthProvider.credential(
-      userInfo.idToken,
-    );
-    const userCredential = await auth().signInWithCredential(googlecredentials);
-
-    return userCredential;
   } catch (e) {
-    // @ts-ignore
-    const error =
-      e.code === statusCodes.SIGN_IN_REQUIRED ? 'Venligst log ind' : e.message;
-    console.error('googleservce', error);
-    throw new Error(error);
+
   }
 };
-const signOut = async () => {
+const signOut = async (LoginProviderType: keyof typeof LoginProviderTypes) => {
   try {
-    await GoogleSignin.signOut();
+    switch (LoginProviderType) {
+      case LoginProviderTypes.Facebook: {
+        await signOutFacebook();
+        break;
+      }
+
+      case LoginProviderTypes.Google: {
+        await signOutGoogle();
+        break;
+      }
+      default: {
+        break;
+      }
+    }
   } catch (error) {
     throw new Error(error.toString());
   }

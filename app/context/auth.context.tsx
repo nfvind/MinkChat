@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {createContext, useReducer, useContext, Dispatch} from 'react';
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {authReducer, AuthActionType} from '../reducers/auth.reducer';
+import {LoginProviderTypes} from "../services/auth.service";
 
 type AuthStateType = {
   isLoading: boolean;
@@ -26,7 +27,7 @@ const AuthContext = createContext<{
 export const AuthProvider = ({children}) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
   const [AuthProviderType, setAuthProviderType] = useState<
-    FirebaseAuthTypes.AuthProvider
+    LoginProviderTypes
   >();
   return (
     <AuthContext.Provider value={{state, dispatch}}>
