@@ -33,8 +33,8 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import {LoginButton, AccessToken} from 'react-native-fbsdk';
-import {signInWithGoogle} from '../../services/auth.google.service';
-import {AuthTypes} from '../../reducers/auth.reducer';
+import {signIn, LoginProviderTypes} from '../../services/auth.service';
+import {AuthAction} from '../../reducers/auth.reducer';
 import {useAuthContext} from '../../context/auth.context';
 import {signInWithFacebook} from '../../services/auth.facebook.service';
 
@@ -43,39 +43,17 @@ declare const global: {HermesInternal: null | {}};
 export const loginScreen = () => {
   const {dispatch} = useAuthContext();
   const signInWithGoogleBtn = async () => {
-    signInWithGoogle()
-      .then((userCredential) => {
-        dispatch({
-          type: AuthTypes.SignIn,
-          payload: {
-            userCredential: userCredential,
-          },
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        switch (error.code) {
-          case statusCodes.PLAY_SERVICES_NOT_AVAILABLE: {
-            // android only
-            Alert.alert(
-              'Google Play-tjenester er ikke tilgængelige eller forældede!',
-            );
-            break;
-          }
-          case 'auth/user-disabled': {
-            Alert.alert(
-              'Brugerkontoen er blevet deaktiveret af en administrator.',
-            );
-            break;
-          }
-        }
+    signIn(LoginProviderTypes.Google).then((userCredential) => {
+      console.log(userCredential);
+      dispatch({
+        type: AuthAction.SignIn,
+        payload: {
+          userCredential: userCredential,
+        },
       });
-  };
-  const FacebookSignIn = () => {
-    signInWithFacebook().then(() => {
-      console.log('Signed in with Facebook!');
     });
   };
+  const FacebookSignIn = () => {};
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -98,21 +76,6 @@ export const loginScreen = () => {
                   size={GoogleSigninButton.Size.Wide}
                   color={GoogleSigninButton.Color.Light}
                   onPress={signInWithGoogleBtn}
-                />
-                <Button title="Facebook Sign-In" onPress={FacebookSignIn} />
-                <LoginButton
-                  onLoginFinished={(error, result) => {
-                    if (error) {
-                      console.log('login has error: ' + result.error);
-                    } else if (result.isCancelled) {
-                      console.log('login is cancelled.');
-                    } else {
-                      AccessToken.getCurrentAccessToken().then((data) => {
-                        console.log(data.accessToken.toString());
-                      });
-                    }
-                  }}
-                  onLogoutFinished={() => console.log('logout.')}
                 />
               </Text>
             </View>

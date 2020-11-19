@@ -10,51 +10,51 @@ type ActionMap<M extends {[index: string]: any}> = {
         payload: M[Key];
       };
 };
-export enum AuthTypes {
+export enum AuthAction {
   Restore = 'RESTORE',
   SignInGoogle = 'SIGN_IN_GOOGLE',
   SignOut = 'SIGN_OUT',
   SignInFB = 'SIGN_IN_FB',
   SignIn = 'SIGN_IN',
 }
-type AuthType = {
+  type AuthType = {
   isLoading: boolean;
   isSignout: boolean;
   userCredential: FirebaseAuthTypes.UserCredential;
 };
 
 type AuthPayload = {
-  [AuthTypes.Restore]: {
+  [AuthAction.Restore]: {
     userCredential: FirebaseAuthTypes.UserCredential;
   };
-  [AuthTypes.SignIn]: {
+  [AuthAction.SignIn]: {
     userCredential: FirebaseAuthTypes.UserCredential;
   };
-  [AuthTypes.SignOut]: undefined;
+  [AuthAction.SignOut]: undefined;
 };
 export type AuthActionType = ActionMap<AuthPayload>[keyof ActionMap<
   AuthPayload
 >];
 export const authReducer = (state: AuthType, action: AuthActionType) => {
-  console.log('authRed', action.type, AuthTypes.Restore);
+  console.log('authRed', action.type, AuthAction.Restore);
   if (action.type !== "SIGN_OUT") {
-    console.log(action.payload.userCredential);
+    console.log("reducer",action.payload.userCredential);
   }
   switch (action.type) {
-    case AuthTypes.Restore: {
+    case AuthAction.Restore: {
       return {
         ...state,
         userCredential: action.payload.userCredential,
         isLoading: false,
       };
     }
-    case AuthTypes.SignIn:
+    case AuthAction.SignIn:
       return {
         ...state,
         isSignout: false,
         userCredential: action.payload.userCredential,
       };
-    case AuthTypes.SignOut:
+    case AuthAction.SignOut:
       return {
         ...state,
         isSignout: true,

@@ -1,5 +1,6 @@
-import auth from '@react-native-firebase/auth';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {LoginManager, AccessToken} from 'react-native-fbsdk';
+import AuthProvider = FirebaseAuthTypes.AuthProvider;
 
 const signInWithFacebook = async () => {
   try {

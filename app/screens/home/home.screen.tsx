@@ -18,7 +18,7 @@ export const HomeScreen = () => {
   return (
     <SafeAreaView style={[styles.container]}>
       <Text style={styles.title}>
-        {'Hej'} {state.userCredential?.user.name}
+        {'Hej'} {state.userCredential?.additionalUserInfo.profile.name}
       </Text>
       <Button
         style={{marginHorizontal: 40, marginBottom: 20}}
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
 
     fontSize: 20,
-    color: '#fff000',
+    color: '#000000',
     textAlign: 'center',
   },
 });
