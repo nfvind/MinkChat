@@ -5,7 +5,7 @@ import {useAuthContext} from '../../context/auth.context';
 import {signOutGoogle} from '../../services/auth.google.service';
 import {signInWithFacebook} from '../../services/auth.facebook.service';
 import {AuthAction} from '../../reducers/auth.reducer';
-import {LoginProviderTypes, signOut} from "../../services/auth.service";
+import {LoginProviderTypes, signOut} from '../../services/auth.service';
 export const HomeScreen = () => {
   const {state, dispatch} = useAuthContext();
 
@@ -17,7 +17,7 @@ export const HomeScreen = () => {
     console.log('logout');
     dispatch({type: AuthAction.SignOut});
   };
-
+  const handleChatRoomsClick = ({}) => {};
   return (
     <SafeAreaView style={[styles.container]}>
       <Text style={styles.title}>
@@ -29,7 +29,6 @@ export const HomeScreen = () => {
         color={'#ff0000'}
         onPress={handleSignOut}
       />
-
     </SafeAreaView>
   );
 };

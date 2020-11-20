@@ -11,7 +11,8 @@ const GoogleSignIn = async () => {
   try {
     await GoogleSignin.hasPlayServices();
     const userInfo = await GoogleSignin.signIn();
-    return auth.GoogleAuthProvider.credential(userInfo.idToken);
+    let credentials = auth.GoogleAuthProvider.credential(userInfo.idToken);
+    return auth().signInWithCredential(credentials);
   } catch (e) {
     console.error(e);
   }

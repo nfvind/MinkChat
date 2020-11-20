@@ -26,9 +26,6 @@ const AuthContext = createContext<{
 
 export const AuthProvider = ({children}) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
-  const [AuthProviderType, setAuthProviderType] = useState<
-    LoginProviderTypes
-  >();
   return (
     <AuthContext.Provider value={{state, dispatch}}>
       {children}

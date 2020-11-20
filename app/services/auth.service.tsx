@@ -3,25 +3,9 @@ import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {SignInWithFacebook, signOutFacebook} from './auth.facebook.service';
 import {useAuthContext} from '../context/auth.context';
 import {statusCodes} from "@react-native-community/google-signin";
-const signIn = async (LoginProviderType: keyof typeof LoginProviderTypes) => {
+const signIn = async (credProvider) => {
   try {
-    let credentials = null;
-
-    switch (LoginProviderType) {
-      case LoginProviderTypes.Facebook: {
-        credentials = await SignInWithFacebook();
-        break;
-      }
-
-      case LoginProviderTypes.Google: {
-        credentials = await GoogleSignIn();
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-
+    let credentials = await credProvider();
     return await auth().signInWithCredential(credentials);
   } catch (e) {
     console.error(e);
@@ -33,26 +17,10 @@ enum LoginProviderTypes {
 }
 const checkAuth = async () => {
   try {
-  } catch (e) {
-
-  }
+  } catch (e) {}
 };
-const signOut = async (LoginProviderType: keyof typeof LoginProviderTypes) => {
+const signOut = async () => {
   try {
-    switch (LoginProviderType) {
-      case LoginProviderTypes.Facebook: {
-        await signOutFacebook();
-        break;
-      }
-
-      case LoginProviderTypes.Google: {
-        await signOutGoogle();
-        break;
-      }
-      default: {
-        break;
-      }
-    }
   } catch (error) {
     throw new Error(error.toString());
   }

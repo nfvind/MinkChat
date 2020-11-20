@@ -32,19 +32,19 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import {LoginButton, AccessToken} from 'react-native-fbsdk';
-import {signIn, LoginProviderTypes} from '../../services/auth.service';
 import {AuthAction} from '../../reducers/auth.reducer';
 import {useAuthContext} from '../../context/auth.context';
+import {GoogleSignIn} from "../../services/auth.google.service";
+import {SignInWithFacebook} from "../../services/auth.facebook.service";
 
 declare const global: {HermesInternal: null | {}};
 
 export const loginScreen = () => {
   const {dispatch} = useAuthContext();
   const signInWithGoogleBtn = async () => {
-    signIn(LoginProviderTypes.Google).then((userCredential) => {
+    GoogleSignIn().then((userCredential) => {
       dispatch({
-        type: AuthAction.SignIn,
+        type: AuthAction.SignInGoogle,
         payload: {
           userCredential: userCredential,
         },
@@ -52,9 +52,9 @@ export const loginScreen = () => {
     });
   };
   const FacebookSignIn = () => {
-    signIn(LoginProviderTypes.Facebook).then((userCredential) => {
+    SignInWithFacebook().then((userCredential) => {
       dispatch({
-        type: AuthAction.SignIn,
+        type: AuthAction.SignInFB,
         payload: {
           userCredential: userCredential,
         },

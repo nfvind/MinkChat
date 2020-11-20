@@ -1,5 +1,5 @@
-import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {LoginManager, AccessToken} from 'react-native-fbsdk';
+import auth from '@react-native-firebase/auth';
+import {AccessToken, LoginManager} from 'react-native-fbsdk';
 
 const SignInWithFacebook = async () => {
   try {
@@ -16,11 +16,10 @@ const SignInWithFacebook = async () => {
     if (!data) {
       throw 'Something went wrong obtaining access token';
     }
-console.log(data.accessToken);
     // Create a Firebase credential with the AccessToken
-
+    let credentials = auth.FacebookAuthProvider.credential(data.accessToken);
     // Sign-in the user with the credential
-    return auth.FacebookAuthProvider.credential(data.accessToken);
+    return await auth().signInWithCredential(credentials);
   } catch (e) {
     console.error(e);
   }
